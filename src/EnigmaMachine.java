@@ -16,7 +16,6 @@ public class EnigmaMachine {
     };
 
     ArrayList<String[]> rotors;
-    ArrayList<String> ringSettings;
     ArrayList<Integer> rotorPositions;
     String reflector;
     ArrayList<String> plugboard;
@@ -44,7 +43,18 @@ public class EnigmaMachine {
     }
 
     private void setRingSettings(char[] ringSettings) {
+        for (int i = 0; i < ringSettings.length; i++) {
+            int dotPosition = this.rotors.get(i)[1].indexOf('A');
+            int shiftAmount = ALPHABET.indexOf(ringSettings[i]);
 
+            for (int j = 0; j < rotors.get(i)[0].length(); j++) {
+                rotors.get(i)[0] = rotors.get(i)[0].substring(0, j) + ALPHABET.charAt((ALPHABET.indexOf(rotors.get(i)[0].charAt(j)) + shiftAmount) % 26) + rotors.get(i)[0].substring(j + 1);
+            }
+
+            while (rotors.get(i)[0].indexOf(ringSettings[i]) != (dotPosition + shiftAmount) % 26) {
+                rotors.get(i)[0] = rotors.get(i)[0].substring(1) + rotors.get(i)[0].charAt(0);
+            }
+        }
     }
 
     private void setReflector(char reflector) {
