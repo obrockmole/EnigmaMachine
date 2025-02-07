@@ -67,37 +67,69 @@ public class EnigmaMachine {
         }
     }
 
-    private void setMessage(String message) {
+    public void setMessage(String message) {
         this.message = message.toUpperCase();
     }
 
 
 
     private void turnRotors() {
-
+        //TODO
     }
 
     private char passThroughPlugboard(char letter) {
-        return '0';
+        for (String pair : plugboard) {
+            if (pair.indexOf(letter) != -1) {
+                letter = pair.charAt((pair.indexOf(letter) + 1) % 2);
+                break;
+            }
+        }
+
+        return letter;
     }
 
-    private char passThroughRotors(char letter) {
+    private char passThroughRotors(char letter, boolean reverse) {
+        //TODO
         return '0';
     }
 
     private char passThroughReflector(char letter) {
-        return '0';
+        int letterIndex = ALPHABET.indexOf(letter);
+        letter = reflector.charAt(letterIndex);
+        return letter;
     }
 
+    public String encodeMessage(String message) {
+        if (message == null) {
+            return null;
+        }
 
+        setMessage(message);
+        return encodeMessage();
+    }
 
-    private String encodeMessage() {
-        passThroughPlugboard('0');
-        passThroughRotors('0');
-        passThroughReflector('0');
-        passThroughRotors('0');
-        passThroughPlugboard('0');
+    public String encodeMessage() {
+        if (message == null) {
+            return null;
+        }
 
-        return null;
+        StringBuilder encodedMessage = new StringBuilder();
+
+        for (char letter : message.toCharArray()) {
+            if (ALPHABET.indexOf(letter) == -1) {
+                encodedMessage.append(letter);
+                continue;
+            }
+
+            turnRotors();
+            letter = passThroughPlugboard(letter);
+            letter = passThroughRotors(letter, false);
+            letter = passThroughReflector(letter);
+            letter = passThroughRotors(letter, true);
+            letter = passThroughPlugboard(letter);
+            encodedMessage.append(letter);
+        }
+
+        return encodedMessage.toString();
     }
 }
