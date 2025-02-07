@@ -1,30 +1,64 @@
+import java.util.ArrayList;
+
 public class EnigmaMachine {
-    public EnigmaMachine() {
+    String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    String[][] rotorList = {
+            {"EKMFLGDQVZNTOWYHXUSPAIBRCJ", "R"},
+            {"AJDKSIRUXBLHWTMCQGZNPYFVOE", "F"},
+            {"BDFHJLCPRTXVZNYEIWGAKMUSQO", "W"},
+            {"ESOVPZJAYQUIRHXLNFTGKDCMWB", "K"},
+            {"VZBRGITYUPSDNHLXAWMJQOFECK", "A"}
+    };
+    String[] reflectors = {
+            "EJMZALYXVBWFCRQUONTSPIKHGD",
+            "YRUHQSLDPXNGOKMIEBFZCWVJAT",
+            "FVPJIAOYEDRZXWGCTKUQSBNMHL"
+    };
+
+    ArrayList<String[]> rotors;
+    ArrayList<String> ringSettings;
+    ArrayList<Integer> rotorPositions;
+    String reflector;
+    ArrayList<String> plugboard;
+    String message;
+
+    public EnigmaMachine(int[] rotors, char[] rotorPositions, char[] ringSettings,  char reflector, String[] plugboard, String message) {
+        setRotors(rotors);
+        setRotorPositions(rotorPositions);
+        setRingSettings(ringSettings);
+        setReflector(reflector);
+        setPlugboard(plugboard);
+        setMessage(message);
+    }
+
+    private void setRotors(int[] rotors) {
+        for (int rotor : rotors) {
+            this.rotors.add(rotorList[rotor - 1]);
+        }
+    }
+
+    private void setRotorPositions(char[] rotorPositions) {
+        for (char position : rotorPositions) {
+            this.rotorPositions.add(ALPHABET.indexOf(position));
+        }
+    }
+
+    private void setRingSettings(char[] ringSettings) {
 
     }
 
-    private void setRotors() {
-
+    private void setReflector(char reflector) {
+        this.reflector = reflectors[ALPHABET.indexOf(reflector) % 3];
     }
 
-    private void setRotorPositions() {
-
+    private void setPlugboard(String[] plugboard) {
+        for (String pair : plugboard) {
+            this.plugboard.add(pair.toUpperCase());
+        }
     }
 
-    private void setRingSettings() {
-
-    }
-
-    private void setReflector() {
-
-    }
-
-    private void setPlugboard() {
-
-    }
-
-    private void setMessage() {
-
+    private void setMessage(String message) {
+        this.message = message.toUpperCase();
     }
 
 
