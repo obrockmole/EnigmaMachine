@@ -15,11 +15,11 @@ public class EnigmaMachine {
             "FVPJIAOYEDRZXWGCTKUQSBNMHL"
     };
 
-    ArrayList<String[]> rotors;
-    ArrayList<Integer> rotorPositions;
-    String reflector;
-    ArrayList<String> plugboard;
-    String message;
+    ArrayList<String[]> rotors = new ArrayList<>();
+    ArrayList<Integer> rotorPositions = new ArrayList<>();
+    String reflector = "";
+    ArrayList<String> plugboard = new ArrayList<>();
+    String message = "";
 
     public EnigmaMachine(int[] rotors, char[] rotorPositions, char[] ringSettings,  char reflector, String[] plugboard, String message) {
         setRotors(rotors);
@@ -44,7 +44,7 @@ public class EnigmaMachine {
 
     private void setRingSettings(char[] ringSettings) {
         for (int i = 0; i < ringSettings.length; i++) {
-            int dotPosition = this.rotors.get(i)[1].indexOf('A');
+            int dotPosition = this.rotors.get(i)[0].indexOf('A');
             int shiftAmount = ALPHABET.indexOf(ringSettings[i]);
 
             for (int j = 0; j < rotors.get(i)[0].length(); j++) {
@@ -74,7 +74,14 @@ public class EnigmaMachine {
 
 
     private void turnRotors() {
-        //TODO
+        rotorPositions.set(2, (rotorPositions.get(2) + 1) % 26);
+        if (ALPHABET.charAt(rotorPositions.get(2)) == rotors.get(2)[1].charAt(0) || ALPHABET.charAt((rotorPositions.get(1) + 1) % 26) == rotors.get(1)[1].charAt(0)) {
+            rotorPositions.set(1, (rotorPositions.get(1) + 1) % 26);
+
+            if (ALPHABET.charAt(rotorPositions.get(1)) == rotors.get(1)[1].charAt(0)) {
+                rotorPositions.set(0, (rotorPositions.get(0) + 1) % 26);
+            }
+        }
     }
 
     private char passThroughPlugboard(char letter) {
@@ -89,8 +96,24 @@ public class EnigmaMachine {
     }
 
     private char passThroughRotors(char letter, boolean reverse) {
-        //TODO
-        return '0';
+        if (!reverse) {
+            for (int i = rotors.size() - 1; i >= 0; i--) {
+                int positionOffset = rotorPositions.get(i);
+                char rotorLetter = rotors.get(i)[0].charAt((ALPHABET.indexOf(letter) + positionOffset) % 26);
+                int alphabetIndex = ALPHABET.indexOf(rotorLetter);
+                letter = ALPHABET.charAt((alphabetIndex - positionOffset + 26) % 26);
+            }
+
+        } else {
+            for (int i = 0; i < rotors.size(); i++) {
+                int positionOffset = rotorPositions.get(i);
+                char alphabetLetter = ALPHABET.charAt((ALPHABET.indexOf(letter) + positionOffset) % 26);
+                int rotorIndex = rotors.get(i)[0].indexOf(alphabetLetter);
+                letter = ALPHABET.charAt((rotorIndex - positionOffset + 26) % 26);
+            }
+        }
+
+        return letter;
     }
 
     private char passThroughReflector(char letter) {
@@ -109,15 +132,11 @@ public class EnigmaMachine {
     }
 
     public String encodeMessage() {
-        if (message == null) {
-            return null;
-        }
-
-        StringBuilder encodedMessage = new StringBuilder();
+        String encodedMessage = "";
 
         for (char letter : message.toCharArray()) {
             if (ALPHABET.indexOf(letter) == -1) {
-                encodedMessage.append(letter);
+                encodedMessage += (letter);
                 continue;
             }
 
@@ -127,9 +146,9 @@ public class EnigmaMachine {
             letter = passThroughReflector(letter);
             letter = passThroughRotors(letter, true);
             letter = passThroughPlugboard(letter);
-            encodedMessage.append(letter);
+            encodedMessage += (letter);
         }
 
-        return encodedMessage.toString();
+        return encodedMessage;
     }
 }

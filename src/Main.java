@@ -1,6 +1,6 @@
 public class Main {
     public static void main(String[] args) {
-        String message = "aaaaa";
+        String message = "AAAAA";
 
         EnigmaMachine enigma = new EnigmaMachine(
             new int[] {1, 2, 3},
