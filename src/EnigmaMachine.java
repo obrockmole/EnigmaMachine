@@ -21,7 +21,8 @@ public class EnigmaMachine {
     ArrayList<String> plugboard = new ArrayList<>();
     String message = "";
 
-    public EnigmaMachine(int[] rotors, char[] rotorPositions, char[] ringSettings,  char reflector, String[] plugboard, String message) {
+    public EnigmaMachine(int[] rotors, char[] rotorPositions, char[] ringSettings,
+                         char reflector, String[] plugboard, String message) {
         setRotors(rotors);
         setRotorPositions(rotorPositions);
         setRingSettings(ringSettings);
@@ -48,7 +49,9 @@ public class EnigmaMachine {
             int shiftAmount = ALPHABET.indexOf(ringSettings[i]);
 
             for (int j = 0; j < rotors.get(i)[0].length(); j++) {
-                rotors.get(i)[0] = rotors.get(i)[0].substring(0, j) + ALPHABET.charAt((ALPHABET.indexOf(rotors.get(i)[0].charAt(j)) + shiftAmount) % 26) + rotors.get(i)[0].substring(j + 1);
+                rotors.get(i)[0] = rotors.get(i)[0].substring(0, j) +
+                        ALPHABET.charAt((ALPHABET.indexOf(rotors.get(i)[0].charAt(j)) + shiftAmount) % 26) +
+                        rotors.get(i)[0].substring(j + 1);
             }
 
             while (rotors.get(i)[0].indexOf(ringSettings[i]) != (dotPosition + shiftAmount) % 26) {
@@ -75,7 +78,8 @@ public class EnigmaMachine {
 
     private void turnRotors() {
         rotorPositions.set(2, (rotorPositions.get(2) + 1) % 26);
-        if (ALPHABET.charAt(rotorPositions.get(2)) == rotors.get(2)[1].charAt(0) || ALPHABET.charAt((rotorPositions.get(1) + 1) % 26) == rotors.get(1)[1].charAt(0)) {
+        if (ALPHABET.charAt(rotorPositions.get(2)) == rotors.get(2)[1].charAt(0) ||
+                ALPHABET.charAt((rotorPositions.get(1) + 1) % 26) == rotors.get(1)[1].charAt(0)) {
             rotorPositions.set(1, (rotorPositions.get(1) + 1) % 26);
 
             if (ALPHABET.charAt(rotorPositions.get(1)) == rotors.get(1)[1].charAt(0)) {
